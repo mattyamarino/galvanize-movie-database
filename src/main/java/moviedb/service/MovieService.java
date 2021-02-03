@@ -1,5 +1,6 @@
 package moviedb.service;
 
+import moviedb.exception.MovieNotFoundException;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
 import moviedb.repository.MovieRepository;
@@ -41,6 +42,10 @@ public class MovieService {
     }
 
     public MovieDto getMovieByTitle(String title) {
-        return mapMovieDto(movieRepository.findByTitle(title));
+        MovieEntity movieEntity = movieRepository.findByTitle(title);
+        if(movieEntity == null)
+            throw new MovieNotFoundException("We are Sorry! Movie not found");
+
+        return mapMovieDto(movieEntity);
     }
 }

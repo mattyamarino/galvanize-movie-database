@@ -1,5 +1,6 @@
 package moviedb.service;
 
+import moviedb.exception.MovieNotFoundException;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
 import moviedb.repository.MovieRepository;
@@ -55,5 +56,15 @@ class MovieServiceTest {
         verify(movieRepository, times(1)).findByTitle("The Avengers");
         assertEquals(expected, result);
     }
+
+    @Test
+    public void getMovieByTitle_callsRepositoryAndThrowsException(){
+        when(movieRepository.findByTitle("The Avengers")).thenReturn(null);
+
+        assertThrows(MovieNotFoundException.class, ()->service.getMovieByTitle("The Avengers"), "We are Sorry! Movie not found");
+        verify(movieRepository, times(1)).findByTitle("The Avengers");
+
+    }
+
 
 }
