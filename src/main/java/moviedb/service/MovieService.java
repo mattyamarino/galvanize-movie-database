@@ -7,8 +7,6 @@ import moviedb.model.MovieEntity;
 import moviedb.model.ReviewDto;
 import moviedb.model.ReviewEntity;
 import moviedb.repository.MovieRepository;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

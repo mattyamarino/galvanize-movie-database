@@ -2,11 +2,9 @@ package moviedb.controller;
 
 import moviedb.model.MovieDto;
 import moviedb.model.ReviewDto;
-import moviedb.model.ReviewEntity;
 import moviedb.service.MovieService;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 @RestController
