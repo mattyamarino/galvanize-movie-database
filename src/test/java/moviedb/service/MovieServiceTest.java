@@ -97,9 +97,19 @@ class MovieServiceTest {
     @Test
     public void addReviewToMovie_throwsExceptionWhenNoRatingIsProvided(){
         ReviewDto reviewDto = new ReviewDto(0, "I liked the guy with the bow and arrow");
-        assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with star rating");
+        assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with valid star rating");
+    }
 
+    @Test
+    public void addReviewToMovie_throwsExceptionWhenGivenRatingBelow0(){
+        ReviewDto reviewDto = new ReviewDto(-1, "I liked the guy with the bow and arrow");
+        assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with valid star rating");
+    }
 
+    @Test
+    public void addReviewToMovie_throwsExceptionWhenGivenRatingAbove5(){
+        ReviewDto reviewDto = new ReviewDto(6, "I liked the guy with the bow and arrow");
+        assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with valid star rating");
     }
 
     @Test

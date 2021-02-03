@@ -40,8 +40,8 @@ public class MovieService {
     }
 
     public void addReviewToMovie(String movieTitle, ReviewDto reviewDto) {
-        if(reviewDto.getRating() == 0)
-            throw new InvalidReviewException("Please resubmit review with star rating");
+        if(reviewDto.getRating() < 1 || reviewDto.getRating() > 5)
+            throw new InvalidReviewException("Please resubmit review with valid star rating");
         ReviewEntity reviewEntity = mapReviewEntity(reviewDto);
         MovieEntity movieToUpdate = movieRepository.findByTitle(movieTitle);
         movieToUpdate.getReviews().add(reviewEntity);
