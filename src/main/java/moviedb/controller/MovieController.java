@@ -1,11 +1,10 @@
 package moviedb.controller;
 
 import moviedb.model.MovieDto;
+import moviedb.model.ReviewDto;
+import moviedb.model.ReviewEntity;
 import moviedb.service.MovieService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.Entity;
 import java.util.List;
@@ -28,6 +27,11 @@ public class MovieController {
     @GetMapping("/{title}")
     public MovieDto getMovieByTitle(@PathVariable String title){
         return service.getMovieByTitle(title);
+    }
+
+    @PatchMapping("/{title}")
+    public void addReviewToMoview(@PathVariable String title, @RequestBody ReviewDto reviewDto) {
+        service.addReviewToMovie(title, reviewDto);
     }
 
 }

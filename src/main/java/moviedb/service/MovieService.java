@@ -56,11 +56,33 @@ public class MovieService {
                 .director(movieEntity.getDirector())
                 .starRating(movieEntity.getStarRating())
                 .title(movieEntity.getTitle())
+                .reviews(mapReviewDtos(movieEntity.getReviews()))
                 .build();
     }
 
     private ReviewEntity mapReviewEntity(ReviewDto reviewDto) {
         return new ReviewEntity(reviewDto.getRating(), reviewDto.getDescription());
+    }
+
+    private List<ReviewDto> mapReviewDtos(List<ReviewEntity> reviewEntities) {
+        if(reviewEntities == null) {
+            return new ArrayList<>();
+        }
+
+        List<ReviewDto> returnList = new ArrayList<>();
+
+        for(ReviewEntity reviewEntity: reviewEntities) {
+            returnList.add(mapReviewDto(reviewEntity));
+        }
+
+        return returnList;
+    }
+
+    private ReviewDto mapReviewDto(ReviewEntity reviewEntity) {
+        return ReviewDto.builder()
+                .rating(reviewEntity.getRating())
+                .description(reviewEntity.getDescription())
+                .build();
     }
 
     double getStarRatingAverage(List<ReviewEntity> reviews) {

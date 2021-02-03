@@ -38,6 +38,9 @@ class MovieServiceTest {
         MovieDto movieDto1 = new MovieDto();
         MovieDto movieDto2 = new MovieDto();
         MovieDto movieDto3 = new MovieDto();
+        movieDto1.setReviews(new ArrayList<>());
+        movieDto2.setReviews(new ArrayList<>());
+        movieDto3.setReviews(new ArrayList<>());
         List<MovieDto> expected = List.of(movieDto1, movieDto2, movieDto3);
 
         when(movieRepository.findAll()).thenReturn(movies);
@@ -50,7 +53,7 @@ class MovieServiceTest {
 
     @Test
     public void getMovieByTitle_callsRepositoryAndReturnsMovie(){
-        MovieDto expected = new MovieDto("The Avengers", "Fancy Guy",  "first guy, second guy", "2012", "hulk smash", 4, null);
+        MovieDto expected = new MovieDto("The Avengers", "Fancy Guy",  "first guy, second guy", "2012", "hulk smash", 0, new ArrayList<>());
         MovieEntity movieEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash");
         when(movieRepository.findByTitle("The Avengers")).thenReturn(movieEntity);
 
