@@ -80,6 +80,56 @@ class MovieControllerTest {
     }
 
     @Test
+    public void getMovieByTitle_ThrowsMovieNotFoundException() throws Exception {
+
+        mockMvc.perform(get("/movies/"+movieDto1.getTitle())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+    }
+
+
+    @Test
+    public void addReviewToMovie_withoutExistingReview() throws Exception {
+        movieRepository.save(movieEntity2);
+        ReviewDto reviewDto = new ReviewDto(4, "awesome");
+        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
+        String reviewString = objectMapper.writeValueAsString(reviewDto);
+
+        mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(reviewString))
+                .andExpect(status().isOk());
+
+        MovieEntity result = movieRepository.findByTitle(movieEntity2.getTitle());
+        assertEquals(reviewEntity.getRating(), result.getReviews().get(0).getRating());
+        assertEquals(reviewEntity.getDescription(), result.getReviews().get(0).getDescription());
+        assertEquals(4.0, result.getStarRating());
+    }
+
+
+    @Test
+    public void addReviewToMovie_withExistingReview() throws Exception {
+        ReviewEntity existingReview = new ReviewEntity(3, "its ok");
+        movieEntity2.getReviews().add(existingReview);
+        movieRepository.save(movieEntity2);
+        ReviewDto reviewDto = new ReviewDto(4, "awesome");
+        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
+        String reviewString = objectMapper.writeValueAsString(reviewDto);
+
+        mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(reviewString))
+                .andExpect(status().isOk());
+
+        MovieEntity result = movieRepository.findByTitle(movieEntity2.getTitle());
+        assertEquals(reviewEntity.getRating(), result.getReviews().get(1).getRating());
+        assertEquals(reviewEntity.getDescription(), result.getReviews().get(1).getDescription());
+        assertEquals(3.5, result.getStarRating());
+    }
+
+    @Test
     public void getMovieByTitle_callsRepositoryAndReturnsMovieWithRating() throws Exception {
         ReviewDto reviewDto1 = new ReviewDto(2, "bad movie");
         ReviewDto reviewDto2 = new ReviewDto(3, "ok movie");
@@ -112,44 +162,15 @@ class MovieControllerTest {
     }
 
     @Test
-    public void addReviewToMovie_withoutExistingReview() throws Exception {
-        movieRepository.save(movieEntity2);
-        ReviewDto reviewDto = new ReviewDto(4, "awesome");
-        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
+    public void addReviewToMovie_Bad_request() throws Exception {
+        ReviewDto reviewDto = new ReviewDto(0, "awesome");
         String reviewString = objectMapper.writeValueAsString(reviewDto);
 
         mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reviewString))
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
 
-        MovieEntity result = movieRepository.findByTitle(movieEntity2.getTitle());
-        assertEquals(reviewEntity.getRating(), result.getReviews().get(0).getRating());
-        assertEquals(reviewEntity.getDescription(), result.getReviews().get(0).getDescription());
-        assertEquals(4.0, result.getStarRating());
     }
-
-    @Test
-    public void addReviewToMovie_withExistingReview() throws Exception {
-        ReviewEntity existingReview = new ReviewEntity(3, "its ok");
-        movieEntity2.getReviews().add(existingReview);
-        movieRepository.save(movieEntity2);
-        ReviewDto reviewDto = new ReviewDto(4, "awesome");
-        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
-        String reviewString = objectMapper.writeValueAsString(reviewDto);
-
-        mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(reviewString))
-                .andExpect(status().isOk());
-
-        MovieEntity result = movieRepository.findByTitle(movieEntity2.getTitle());
-        assertEquals(reviewEntity.getRating(), result.getReviews().get(1).getRating());
-        assertEquals(reviewEntity.getDescription(), result.getReviews().get(1).getDescription());
-        assertEquals(3.5, result.getStarRating());
-    }
-
-
 }

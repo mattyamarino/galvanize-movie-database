@@ -1,5 +1,6 @@
 package moviedb.service;
 
+import moviedb.exception.InvalidReviewException;
 import moviedb.exception.MovieNotFoundException;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
@@ -41,6 +42,8 @@ public class MovieService {
     }
 
     public void addReviewToMovie(String movieTitle, ReviewDto reviewDto) {
+        if(reviewDto.getRating() == 0)
+            throw new InvalidReviewException("Please resubmit review with star rating");
         ReviewEntity reviewEntity = mapReviewEntity(reviewDto);
         MovieEntity movieToUpdate = movieRepository.findByTitle(movieTitle);
         movieToUpdate.getReviews().add(reviewEntity);

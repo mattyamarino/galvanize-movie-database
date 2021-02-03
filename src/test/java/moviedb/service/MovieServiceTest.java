@@ -1,5 +1,6 @@
 package moviedb.service;
 
+import moviedb.exception.InvalidReviewException;
 import moviedb.exception.MovieNotFoundException;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
@@ -94,10 +95,19 @@ class MovieServiceTest {
     }
 
     @Test
+    public void addReviewToMovie_throwsExceptionWhenNoRatingIsProvided(){
+        ReviewDto reviewDto = new ReviewDto(0, "I liked the guy with the bow and arrow");
+        assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with star rating");
+
+
+    }
+
+    @Test
     public void getStarRatingAverage_averagesTwoRatings() {
         ReviewEntity review1 = new ReviewEntity(3, "some description");
         ReviewEntity review2 = new ReviewEntity(4, "some description");
         assertEquals(3.5, service.getStarRatingAverage(List.of(review1, review2)));
     }
+
 
 }
