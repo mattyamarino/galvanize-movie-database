@@ -39,4 +39,8 @@ public class MovieService {
                 .title(movieEntity.getTitle())
                 .build();
     }
+
+    public MovieDto getMovieByTitle(String title) {
+        return mapMovieDto(movieRepository.findByTitle(title));
+    }
 }

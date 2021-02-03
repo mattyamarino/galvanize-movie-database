@@ -44,4 +44,16 @@ class MovieServiceTest {
         assertEquals(expected, result);
     }
 
+    @Test
+    public void getMovieByTitle_callsRepositoryAndreturnsMovie(){
+        MovieDto expected = new MovieDto("The Avengers", "Fancy Guy",  "first guy, second guy", "2012", "hulk smash", 4);
+        MovieEntity movieEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash", 4);
+        when(movieRepository.findByTitle("The Avengers")).thenReturn(movieEntity);
+
+        MovieDto result = service.getMovieByTitle("The Avengers");
+
+        verify(movieRepository, times(1)).findByTitle("The Avengers");
+        assertEquals(expected, result);
+    }
+
 }

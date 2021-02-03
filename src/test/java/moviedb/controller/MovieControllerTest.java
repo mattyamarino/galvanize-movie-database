@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
 import moviedb.repository.MovieRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -37,23 +38,44 @@ class MovieControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    MovieDto movieDto1, movieDto2, movieDto3;
+    MovieEntity movieEntity1, movieEntity2, movieEntity3;
+    @BeforeEach
+    public void setUp(){
+        String actors = "first guy, second guy";
+        movieDto1 = new MovieDto("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
+        movieDto2 = new MovieDto("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
+        movieDto3 = new MovieDto("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);
+        movieEntity1 = new MovieEntity("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
+        movieEntity2 = new MovieEntity("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
+        movieEntity3 = new MovieEntity("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);
+    }
+
     @Test
     public void getAllMovies() throws Exception {
-        String actors = "first guy, second guy";
-        MovieDto movieDto1 = new MovieDto("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
-        MovieDto movieDto2 = new MovieDto("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
-        MovieDto movieDto3 = new MovieDto("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);
         List<MovieDto> expected = List.of(movieDto1, movieDto2, movieDto3);
         String expectedString = objectMapper.writeValueAsString(expected);
 
-        movieRepository.save(new MovieEntity("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4));
-        movieRepository.save(new MovieEntity("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5));
-        movieRepository.save(new MovieEntity("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4));
+        movieRepository.save(movieEntity1);
+        movieRepository.save(movieEntity2);
+        movieRepository.save(movieEntity3);
 
         mockMvc.perform(get("/movies")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(expectedString));
+    }
+
+    @Test
+    public void getMovieByTitle_callsRepositoryAndReturnsMovie() throws Exception {
+        movieRepository.save(movieEntity1);
+        movieRepository.save(movieEntity2);
+        String expected = objectMapper.writeValueAsString(movieDto1);
+
+        mockMvc.perform(get("/movies/"+movieDto1.getTitle())
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().string(expected));
     }
 
 
