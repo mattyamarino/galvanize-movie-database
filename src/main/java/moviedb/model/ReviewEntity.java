@@ -19,10 +19,6 @@ public class ReviewEntity {
     private int rating;
     private String description;
 
-    public Long getId() {
-        return id;
-    }
-
     public int getRating() {
         return rating;
     }
