@@ -111,18 +111,20 @@ class MovieControllerTest {
     public void addReviewToMovie_withExistingReview() throws Exception {
         ReviewEntity existingReview = new ReviewEntity(3, "its ok");
         movieEntity2.getReviews().add(existingReview);
+        String title = movieEntity2.getTitle();
         movieRepository.save(movieEntity2);
         ReviewDto reviewDto = new ReviewDto(4, "awesome");
         ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
         String reviewString = objectMapper.writeValueAsString(reviewDto);
 
-        mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())
+        mockMvc.perform(patch("/movies/" + title)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(reviewString))
                 .andExpect(status().isOk());
 
-        MovieEntity result = movieRepository.findByTitle(movieEntity2.getTitle());
+        MovieEntity result = movieRepository.findByTitle(title);
+        assertEquals(title, result.getTitle());
         assertEquals(reviewEntity.getRating(), result.getReviews().get(1).getRating());
         assertEquals(reviewEntity.getDescription(), result.getReviews().get(1).getDescription());
         assertEquals(3.5, result.getStarRating());
