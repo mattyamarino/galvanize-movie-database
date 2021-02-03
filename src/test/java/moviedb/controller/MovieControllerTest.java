@@ -44,9 +44,9 @@ class MovieControllerTest {
         movieDto1 = new MovieDto("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4, null);
         movieDto2 = new MovieDto("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5, null);
         movieDto3 = new MovieDto("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4, null);
-        movieEntity1 = new MovieEntity("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
-        movieEntity2 = new MovieEntity("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
-        movieEntity3 = new MovieEntity("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);
+        movieEntity1 = new MovieEntity("The Avengers", "Fancy Guy", actors, "2012", "hulk smash");
+        movieEntity2 = new MovieEntity("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie");
+        movieEntity3 = new MovieEntity("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car");
     }
 
     @Test

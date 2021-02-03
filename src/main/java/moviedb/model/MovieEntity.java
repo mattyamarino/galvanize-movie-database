@@ -24,14 +24,13 @@ public class MovieEntity {
     @OneToMany(cascade = CascadeType.ALL)
     private List<ReviewEntity> reviews;
 
-    public MovieEntity(String title, String director, String actors, String releaseYear, String description,
-                       double starRating) {
+    public MovieEntity(String title, String director, String actors, String releaseYear, String description) {
         this.title = title;
         this.director = director;
         this.actors = actors;
         this.releaseYear = releaseYear;
         this.description = description;
-        this.starRating = starRating;
+        this.starRating = 0;
         this.reviews = new ArrayList<>();
     }
 
@@ -63,8 +62,8 @@ public class MovieEntity {
         return reviews;
     }
 
-    public void setReviews(List<ReviewEntity> reviews) {
-        this.reviews = reviews;
+    public void setStarRating(double starRating) {
+        this.starRating = starRating;
     }
 
     @Override

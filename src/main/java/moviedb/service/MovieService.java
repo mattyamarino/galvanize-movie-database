@@ -44,14 +44,11 @@ public class MovieService {
         ReviewEntity reviewEntity = mapReviewEntity(reviewDto);
         MovieEntity movieToUpdate = movieRepository.findByTitle(movieTitle);
         movieToUpdate.getReviews().add(reviewEntity);
+        movieToUpdate.setStarRating(getStarRatingAverage(movieToUpdate.getReviews()));
         movieRepository.save(movieToUpdate);
     }
 
-    ReviewEntity mapReviewEntity(ReviewDto reviewDto) {
-        return new ReviewEntity(reviewDto.getRating(), reviewDto.getDescription());
-    }
-
-    MovieDto mapMovieDto(MovieEntity movieEntity) {
+    private MovieDto mapMovieDto(MovieEntity movieEntity) {
         return MovieDto.builder()
                 .actors(movieEntity.getActors())
                 .description(movieEntity.getDescription())
@@ -60,5 +57,19 @@ public class MovieService {
                 .starRating(movieEntity.getStarRating())
                 .title(movieEntity.getTitle())
                 .build();
+    }
+
+    private ReviewEntity mapReviewEntity(ReviewDto reviewDto) {
+        return new ReviewEntity(reviewDto.getRating(), reviewDto.getDescription());
+    }
+
+    double getStarRatingAverage(List<ReviewEntity> reviews) {
+        double totalRating = 0.0;
+
+        for(ReviewEntity review : reviews) {
+            totalRating += review.getRating();
+        }
+
+        return totalRating / reviews.size();
     }
 }
