@@ -62,7 +62,7 @@ public class MovieService {
     }
 
     private ReviewEntity mapReviewEntity(ReviewDto reviewDto) {
-        return new ReviewEntity(reviewDto.getRating(), reviewDto.getDescription());
+        return new ReviewEntity(reviewDto.getRating(), reviewDto.getDescription(), reviewDto.getUserName());
     }
 
     private List<ReviewDto> mapReviewDtos(List<ReviewEntity> reviewEntities) {
@@ -83,6 +83,7 @@ public class MovieService {
         return ReviewDto.builder()
                 .rating(reviewEntity.getRating())
                 .description(reviewEntity.getDescription())
+                .userName(reviewEntity.getUserName())
                 .build();
     }
 

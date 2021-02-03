@@ -90,8 +90,8 @@ class MovieControllerTest {
     @Test
     public void addReviewToMovie_withoutExistingReview() throws Exception {
         movieRepository.save(movieEntity2);
-        ReviewDto reviewDto = new ReviewDto(4, "awesome");
-        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
+        ReviewDto reviewDto = new ReviewDto(4, "awesome", "someGuy29");
+        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome", "someGuy29");
         String reviewString = objectMapper.writeValueAsString(reviewDto);
 
         mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())
@@ -103,18 +103,19 @@ class MovieControllerTest {
         MovieEntity result = movieRepository.findByTitle(movieEntity2.getTitle());
         assertEquals(reviewEntity.getRating(), result.getReviews().get(0).getRating());
         assertEquals(reviewEntity.getDescription(), result.getReviews().get(0).getDescription());
+        assertEquals(reviewEntity.getUserName(), result.getReviews().get(0).getUserName());
         assertEquals(4.0, result.getStarRating());
     }
 
 
     @Test
     public void addReviewToMovie_withExistingReview() throws Exception {
-        ReviewEntity existingReview = new ReviewEntity(3, "its ok");
+        ReviewEntity existingReview = new ReviewEntity(3, "its ok", "otherGuy78");
         movieEntity2.getReviews().add(existingReview);
         String title = movieEntity2.getTitle();
         movieRepository.save(movieEntity2);
-        ReviewDto reviewDto = new ReviewDto(4, "awesome");
-        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome");
+        ReviewDto reviewDto = new ReviewDto(4, "awesome", "someGuy29");
+        ReviewEntity reviewEntity = new ReviewEntity(4, "awesome", "someGuy29");
         String reviewString = objectMapper.writeValueAsString(reviewDto);
 
         mockMvc.perform(patch("/movies/" + title)
@@ -127,18 +128,19 @@ class MovieControllerTest {
         assertEquals(title, result.getTitle());
         assertEquals(reviewEntity.getRating(), result.getReviews().get(1).getRating());
         assertEquals(reviewEntity.getDescription(), result.getReviews().get(1).getDescription());
+        assertEquals(reviewEntity.getUserName(), result.getReviews().get(1).getUserName());
         assertEquals(3.5, result.getStarRating());
     }
 
     @Test
     public void getMovieByTitle_callsRepositoryAndReturnsMovieWithRating() throws Exception {
-        ReviewDto reviewDto1 = new ReviewDto(2, "bad movie");
-        ReviewDto reviewDto2 = new ReviewDto(3, "ok movie");
-        ReviewDto reviewDto3 = new ReviewDto(4, "pretty good movie");
+        ReviewDto reviewDto1 = new ReviewDto(2, "bad movie", "mrNegative118");
+        ReviewDto reviewDto2 = new ReviewDto(3, "ok movie", "IamAlright");
+        ReviewDto reviewDto3 = new ReviewDto(4, "pretty good movie", "marvelApplogist890");
 
-        ReviewEntity reviewEntity1 = new ReviewEntity(2, "bad movie");
-        ReviewEntity reviewEntity2 = new ReviewEntity(3, "ok movie");
-        ReviewEntity reviewEntity3 = new ReviewEntity(4, "pretty good movie");
+        ReviewEntity reviewEntity1 = new ReviewEntity(2, "bad movie", "mrNegative118");
+        ReviewEntity reviewEntity2 = new ReviewEntity(3, "ok movie", "IamAlright");
+        ReviewEntity reviewEntity3 = new ReviewEntity(4, "pretty good movie", "marvelApplogist890");
 
         movieEntity1.getReviews().add(reviewEntity1);
         movieEntity1.getReviews().add(reviewEntity2);
@@ -164,7 +166,7 @@ class MovieControllerTest {
 
     @Test
     public void addReviewToMovie_Bad_request() throws Exception {
-        ReviewDto reviewDto = new ReviewDto(0, "awesome");
+        ReviewDto reviewDto = new ReviewDto(0, "awesome", "someGuy29");
         String reviewString = objectMapper.writeValueAsString(reviewDto);
 
         mockMvc.perform(patch("/movies/" + movieEntity2.getTitle())

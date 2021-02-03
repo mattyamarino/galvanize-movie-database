@@ -18,6 +18,7 @@ public class ReviewEntity {
     private Long id;
     private int rating;
     private String description;
+    public String userName;
 
     public int getRating() {
         return rating;
@@ -27,9 +28,14 @@ public class ReviewEntity {
         return description;
     }
 
-    public ReviewEntity(int rating, String description) {
+    public String getUserName() {
+        return userName;
+    }
+
+    public ReviewEntity(int rating, String description, String userName) {
         this.rating = rating;
         this.description = description;
+        this.userName = userName;
     }
 
     @Override
@@ -39,11 +45,12 @@ public class ReviewEntity {
         ReviewEntity that = (ReviewEntity) o;
         return rating == that.rating &&
                 Objects.equals(id, that.id) &&
-                Objects.equals(description, that.description);
+                Objects.equals(description, that.description) &&
+                Objects.equals(userName, that.userName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, rating, description);
+        return Objects.hash(id, rating, description, userName);
     }
 }

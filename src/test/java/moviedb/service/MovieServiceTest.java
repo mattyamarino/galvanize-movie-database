@@ -75,8 +75,8 @@ class MovieServiceTest {
 
     @Test
     public void addReviewToMovie_callsGetMovieByTitle_updatesStarRatingWithNoPriorReviews_andSavesReview() {
-        ReviewDto reviewDto = new ReviewDto(4, "I liked the guy with the bow and arrow");
-        ReviewEntity reviewEntity = new ReviewEntity(4, "I liked the guy with the bow and arrow");
+        ReviewDto reviewDto = new ReviewDto(4, "I liked the guy with the bow and arrow", "someGuy29");
+        ReviewEntity reviewEntity = new ReviewEntity(4, "I liked the guy with the bow and arrow", "someGuy29");
         MovieEntity movieEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash");
 
         MovieEntity updatedEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash");
@@ -96,26 +96,26 @@ class MovieServiceTest {
 
     @Test
     public void addReviewToMovie_throwsExceptionWhenNoRatingIsProvided(){
-        ReviewDto reviewDto = new ReviewDto(0, "I liked the guy with the bow and arrow");
+        ReviewDto reviewDto = new ReviewDto(0, "I liked the guy with the bow and arrow", "someGuy29");
         assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with valid star rating");
     }
 
     @Test
     public void addReviewToMovie_throwsExceptionWhenGivenRatingBelow0(){
-        ReviewDto reviewDto = new ReviewDto(-1, "I liked the guy with the bow and arrow");
+        ReviewDto reviewDto = new ReviewDto(-1, "I liked the guy with the bow and arrow", "someGuy29");
         assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with valid star rating");
     }
 
     @Test
     public void addReviewToMovie_throwsExceptionWhenGivenRatingAbove5(){
-        ReviewDto reviewDto = new ReviewDto(6, "I liked the guy with the bow and arrow");
+        ReviewDto reviewDto = new ReviewDto(6, "I liked the guy with the bow and arrow", "someGuy29");
         assertThrows(InvalidReviewException.class, ()->service.addReviewToMovie("The Avengers", reviewDto), "Please resubmit review with valid star rating");
     }
 
     @Test
     public void getStarRatingAverage_averagesTwoRatings() {
-        ReviewEntity review1 = new ReviewEntity(3, "some description");
-        ReviewEntity review2 = new ReviewEntity(4, "some description");
+        ReviewEntity review1 = new ReviewEntity(3, "some description", "userperson");
+        ReviewEntity review2 = new ReviewEntity(4, "some description", "userperson");
         assertEquals(3.5, service.getStarRatingAverage(List.of(review1, review2)));
     }
 

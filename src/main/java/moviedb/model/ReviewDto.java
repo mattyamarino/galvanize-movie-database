@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class ReviewDto {
     private int rating;
     private String description;
+    private String userName;
 }
