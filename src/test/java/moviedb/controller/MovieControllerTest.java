@@ -1,6 +1,5 @@
 package moviedb.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
@@ -17,7 +16,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import javax.transaction.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -43,9 +41,9 @@ class MovieControllerTest {
     @BeforeEach
     public void setUp(){
         String actors = "first guy, second guy";
-        movieDto1 = new MovieDto("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
-        movieDto2 = new MovieDto("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
-        movieDto3 = new MovieDto("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);
+        movieDto1 = new MovieDto("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4, null);
+        movieDto2 = new MovieDto("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5, null);
+        movieDto3 = new MovieDto("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4, null);
         movieEntity1 = new MovieEntity("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
         movieEntity2 = new MovieEntity("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
         movieEntity3 = new MovieEntity("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);

@@ -18,4 +18,5 @@ public class MovieDto {
     private String releaseYear;
     private String description;
     private double starRating;
+    private List<ReviewDto> reviews;
 }

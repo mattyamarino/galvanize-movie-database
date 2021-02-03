@@ -3,11 +3,10 @@ package moviedb.model;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @AllArgsConstructor
@@ -22,14 +21,18 @@ public class MovieEntity {
     private String releaseYear;
     private String description;
     private double starRating;
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<ReviewEntity> reviews;
 
-    public MovieEntity(String title, String director, String actors, String releaseYear, String description, double starRating) {
+    public MovieEntity(String title, String director, String actors, String releaseYear, String description,
+                       double starRating) {
         this.title = title;
         this.director = director;
         this.actors = actors;
         this.releaseYear = releaseYear;
         this.description = description;
         this.starRating = starRating;
+        this.reviews = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -54,5 +57,33 @@ public class MovieEntity {
 
     public double getStarRating() {
         return starRating;
+    }
+
+    public List<ReviewEntity> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewEntity> reviews) {
+        this.reviews = reviews;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MovieEntity)) return false;
+        MovieEntity that = (MovieEntity) o;
+        return Double.compare(that.starRating, starRating) == 0 &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(director, that.director) &&
+                Objects.equals(actors, that.actors) &&
+                Objects.equals(releaseYear, that.releaseYear) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(reviews, that.reviews);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, director, actors, releaseYear, description, starRating, reviews);
     }
 }

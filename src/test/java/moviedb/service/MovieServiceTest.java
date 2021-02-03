@@ -3,6 +3,8 @@ package moviedb.service;
 import moviedb.exception.MovieNotFoundException;
 import moviedb.model.MovieDto;
 import moviedb.model.MovieEntity;
+import moviedb.model.ReviewDto;
+import moviedb.model.ReviewEntity;
 import moviedb.repository.MovieRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -46,8 +49,8 @@ class MovieServiceTest {
     }
 
     @Test
-    public void getMovieByTitle_callsRepositoryAndreturnsMovie(){
-        MovieDto expected = new MovieDto("The Avengers", "Fancy Guy",  "first guy, second guy", "2012", "hulk smash", 4);
+    public void getMovieByTitle_callsRepositoryAndReturnsMovie(){
+        MovieDto expected = new MovieDto("The Avengers", "Fancy Guy",  "first guy, second guy", "2012", "hulk smash", 4, null);
         MovieEntity movieEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash", 4);
         when(movieRepository.findByTitle("The Avengers")).thenReturn(movieEntity);
 
@@ -64,6 +67,27 @@ class MovieServiceTest {
         assertThrows(MovieNotFoundException.class, ()->service.getMovieByTitle("The Avengers"), "We are Sorry! Movie not found");
         verify(movieRepository, times(1)).findByTitle("The Avengers");
 
+    }
+
+    @Test
+    public void addReviewToMovie_callsGetMovieByTitle_andSavesReview() {
+        ReviewDto reviewDto = new ReviewDto(4, "I liked the guy with the bow and arrow");
+        ReviewEntity reviewEntity = new ReviewEntity(4, "I liked the guy with the bow and arrow");
+        MovieEntity movieEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash", 4);
+
+        MovieEntity updatedEntity = new MovieEntity("The Avengers", "Fancy Guy", "first guy, second guy", "2012", "hulk smash", 4);
+        updatedEntity.setReviews(new ArrayList<>());
+        updatedEntity.getReviews().add(reviewEntity);
+
+
+        when(movieRepository.findByTitle("The Avengers")).thenReturn(movieEntity);
+        when(movieRepository.save(updatedEntity)).thenReturn(updatedEntity);
+
+        service.addReviewToMovie("The Avengers", reviewDto);
+
+        verify(movieRepository, times(1)).findByTitle("The Avengers");
+        verify(movieRepository, times(1)).save(updatedEntity);
+        assertEquals(updatedEntity, movieEntity);
     }
 
 
