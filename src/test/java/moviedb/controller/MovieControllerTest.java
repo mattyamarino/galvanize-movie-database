@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 
 import javax.transaction.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,15 +39,16 @@ class MovieControllerTest {
 
     @Test
     public void getAllMovies() throws Exception {
-        MovieDto movieDto1 = new MovieDto();
-        MovieDto movieDto2 = new MovieDto();
-        MovieDto movieDto3 = new MovieDto();
+        String actors = "first guy, second guy";
+        MovieDto movieDto1 = new MovieDto("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4);
+        MovieDto movieDto2 = new MovieDto("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5);
+        MovieDto movieDto3 = new MovieDto("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4);
         List<MovieDto> expected = List.of(movieDto1, movieDto2, movieDto3);
         String expectedString = objectMapper.writeValueAsString(expected);
 
-        movieRepository.save(new MovieEntity());
-        movieRepository.save(new MovieEntity());
-        movieRepository.save(new MovieEntity());
+        movieRepository.save(new MovieEntity("The Avengers", "Fancy Guy", actors, "2012", "hulk smash", 4));
+        movieRepository.save(new MovieEntity("That Other Movie", "Less Fancy Guy", actors, "2019", "its a movie", 5));
+        movieRepository.save(new MovieEntity("Back to the Future", "Forgot the guy", actors, "1985", "it has a flying car", 4));
 
         mockMvc.perform(get("/movies")
                 .contentType(MediaType.APPLICATION_JSON))
